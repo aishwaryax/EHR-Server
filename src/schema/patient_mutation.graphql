@@ -1,0 +1,43 @@
+type Mutation{
+    createPatientCase(data:PatientCaseInput!): PatientCase!
+    createPatientRecord(data:PatientRecordInput): PatientRecord!
+    createSharedCase(data:SharedCaseInput): SharedCase!
+    createSharedRecord(data:SharedRecordInput): SharedRecord!
+}
+input PatientCaseInput{
+  patientId: String!
+  icdCode: String!
+  icdSubCode: String!
+  HPC: String!
+  MoI: String
+  DandV: String
+  clinicalNote: String!
+  diagnosisType: DiagnosisType!
+  currentClinicalStatus: Boolean!
+}
+input PatientRecordInput {
+  case: String!
+  onArrival: String!
+  diagnosis: String!
+  Tx: String!
+  reportSuggestions: String
+  cevsSp: Int!
+  cevsDp: Int!
+  cePr: Int!
+  ceRr: Int!
+  ceHeight: Int!
+  ceWeight: Int!
+  diagnosisAfterReport: String
+  medication: String!
+  advice:String!
+  query:String!
+  followUpObservations:String!
+}
+input SharedCaseInput{
+  case:String!
+  receiver: String!
+}
+input SharedRecordInput{
+  record:String!
+  receiver: String!
+}

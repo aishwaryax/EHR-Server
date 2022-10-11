@@ -1,0 +1,127 @@
+type Query {
+  me:User
+  mePatient: Patient!
+  meMedicalPractitioner:MedicalPractitioner!
+  meDatabaseAdmin: DatabaseAdmin!
+  searchUser(data: SearchUserInput!):[User]!
+  viewPatient(id:String!):Patient!
+  viewMedicalPractitioner(id:String!):MedicalPractitioner!
+  getCountry(name:String!,skip:Int!):[Country!]
+  getRegion(name:String!,skip:Int!):[Region!]
+  getHospital(name:String!,skip:Int!):[Hospital!]
+}
+enum MaritalStatus {
+  Single
+  Married
+  Divorced
+  Widowed
+}
+enum UserType {
+  DatabaseAdmin
+  MedicalPractitioner
+  Patient
+}
+enum UserType_ {
+  MedicalPractitioner
+  Patient
+}
+enum Gender {
+  Male
+  Female
+  Transgender
+}
+input SearchUserInput{
+  name:String,
+  email:String,
+  type: UserType_
+}
+type User {
+  id: ID!
+  firstName: String!
+  middleName:String!
+  lastName:String!
+  dob: String!
+  email:String!
+  sex: Gender!
+  password:String!
+  role: UserType!
+  isAdmin: Boolean!
+  verified: Boolean!
+  publicHash:String!
+  privateHash:String!
+}
+type DatabaseAdmin{
+  id: ID!
+  user:User!
+  contact:String!
+  address: String!
+  country: Country!
+  hospital: Hospital!
+  registeredAt: String!
+}
+type MedicalPractitioner{
+  id: ID!
+  user:User!
+  mpId: String!
+  address: String!
+  clinicAddress: String!
+  degree: String!
+  field: String!
+  hospital: Hospital!
+  registeredAt: String!
+}
+type Country {
+  id: ID!
+  countryCode: Int!
+  countryName: String!
+}
+type Region {
+  id: ID!
+  pincode: Int!
+  region: String!
+}
+type Hospital {
+  id: ID!
+  hospitalId: String!
+  name: String!
+  address: String!
+  district: String!
+  pincode: Region!
+  country: Country!
+}
+type AuthPayload{
+  token:String!
+  user:User!
+}
+type Patient{
+  id: ID!
+  user:User!
+  patientId: String!
+  bloodGroup: String!
+  religion: String!
+  maritalStatus: MaritalStatus!
+  primaryLanguage: String!
+  birthPlace: String!
+  address: String!
+  pincode: Region!
+  country: Country!
+  occupation: String!
+  contact1: String!
+  contact2: String!
+  socioEcoStatus: String!
+  immunizationHistory: String!  
+  allergyStatus: Boolean!
+  organDonorStatus: Boolean!
+  PMH: String!
+  DHx: String!
+  Ca: Boolean!
+  IDDM: Boolean!
+  NIDDM: Boolean!
+  COPD: Boolean!
+  MI: Boolean!
+  AF: Boolean!
+  registeredAt: String!
+  cpId: CareProvider
+  insurance: Insurance
+  patientCase: [PatientCase]!
+}

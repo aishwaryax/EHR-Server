@@ -1,0 +1,13 @@
+Changes in Prisma schema -> prisma deploy(Command in prisma folder) -> npm run get-schema(project root folder) ->npm start
+
+pass data to server
+a. while registering medical practioner
+    Only hospitalid of hospital in string
+    dob in YYYY-MM-DD in string
+    sex not in string but plain enum
+
+// Only medicalPractitioner created the case has access to each record
+
+// Hl7 to be passed to sharedCase.js, sharedRecords
+
+// sharedCase and Sharedrecords needs to also pass info about doctors as reciever

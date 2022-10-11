@@ -1,0 +1,114 @@
+type Mutation {
+  login(data:LoginInput!):AuthPayload!
+  registerMedicalPractitioner(data:MedicalPractitionerInput!):String!
+  registerPatient(data:PatientInput!):String!
+  registerDatabaseAdmin(data:DatabaseAdminInput!):String!
+  updateMedicalPractitioner(data:MedicalPractitionerUpdate!):String!
+  updatePatient(data:PatientUpdate!):String!
+  updateDatabaseAdmin(data:DatabaseAdminUpdate!):String!
+  approveMedicalPractitioner(data:MedicalPractitionerApprove!):String!
+  approvePatient(data:PatientApprove!):String!
+}
+input LoginInput {
+  email:String!
+  password:String!
+}
+input PatientApprove {
+  id: String!
+}
+input MedicalPractitionerApprove {
+  id: String!
+}
+input DatabaseAdminInput{
+  firstName: String!
+  middleName:String!
+  lastName:String!
+  dob: String!
+  email:String!
+  sex: Gender!
+  password:String!
+  contact:String!
+  country: String!
+  address: String!
+  hospital: String!
+}
+input MedicalPractitionerInput {
+  firstName: String!
+  middleName:String!
+  lastName:String!
+  dob: String!
+  email:String!
+  sex: Gender!
+  password:String!
+  address: String!
+  clinicAddress: String!
+  degree: String!
+  field: String!
+  hospital: String!
+}
+input PatientInput {
+  firstName: String!
+  middleName:String!
+  lastName:String!
+  dob: String!
+  email:String!
+  sex: Gender!
+  password:String!
+  bloodGroup: String!
+  religion: String!
+  maritalStatus: MaritalStatus!
+  primaryLanguage: String!
+  birthPlace: String!
+  address: String!
+  pincode: String!
+  country: String!
+  occupation: String!
+  contact1: String!
+  contact2: String!
+  socioEcoStatus: String!
+  immunizationHistory: String!  
+  allergyStatus: Boolean
+  organDonorStatus: Boolean
+  PMH: String!
+  DHx: String!
+  Ca: Boolean
+  IDDM: Boolean
+  NIDDM: Boolean
+  COPD: Boolean
+  MI: Boolean
+  AF: Boolean
+}
+input DatabaseAdminUpdate{
+  password:String
+  contact:String
+  address: String
+}
+input MedicalPractitionerUpdate {
+  password:String
+  address: String
+  clinicAddress: String
+}
+input PatientUpdate {
+  password:String
+  religion: String
+  maritalStatus: MaritalStatus
+  primaryLanguage: String
+  address: String
+  pincode: String
+  country: String
+  occupation: String
+  contact1: String
+  contact2: String
+  socioEcoStatus: String
+  immunizationHistory: String 
+  allergyStatus: Boolean
+  organDonorStatus: Boolean
+  PMH: String
+  DHx: String
+  Ca: Boolean
+  IDDM: Boolean
+  NIDDM: Boolean
+  COPD: Boolean
+  MI: Boolean
+  AF: Boolean
+}

@@ -1,0 +1,93 @@
+type Query {
+  viewPatientCase(patientId:String!,caseId:String,ToDate:String,FromDate:String):[PatientCase!]
+  viewPatientRecord(caseId:String!,recordId:String,ToDate:String,FromDate:String):[PatientRecord!]
+  viewSharedCase(patientId:String!,caseId:String,ToDate:String,FromDate:String):[SharedCase!]
+  viewSharedRecord(caseId:String!,recordId:String,ToDate:String,FromDate:String):[SharedRecord!]
+}
+enum DiagnosisType {
+  Provisional
+  Final
+  Interim
+}
+type CareProvider {
+  id: ID!
+  patient: Patient!
+  cpId: String!
+  cpaddress: String!
+  city: String!
+  pincode: Region!
+  country: Country!
+  contact: String!
+  email: String!
+}
+type Insurance {
+  id: ID!
+  patient: Patient!
+  insuranceId: String!
+  insuranceStatus: String!
+  insuranceCompany1: String!
+  insuranceCompany2: String!
+  sponsorerDetails: String!
+}
+type PatientCase {
+  id: ID!
+  patient: Patient!
+  caseId: String!
+  medicalPractitioner: MedicalPractitioner!
+  icdCode: ICDCode!
+  icdSubCode: ICDSubCode!
+  HPC: String!
+  MoI: String
+  DandV: String
+  clinicalNote: String!
+  noOfVisits: Int!
+  diagnosisType: DiagnosisType!
+  currentClinicalStatus: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  patientRecord: [PatientRecord]!
+  sharedCase: [SharedCase]!
+  sharedRecord:[SharedRecord]!
+}
+type PatientRecord {
+  id: ID!
+  patient: Patient!
+  case: PatientCase!
+  recordId: String!
+  medicalPractitioner: MedicalPractitioner!
+  visitNo: Int!
+  onArrival: String!
+  diagnosis: String!
+  Tx: String!
+  reportSuggestions: String
+  cevsSp: Int!
+  cevsDp: Int!
+  cePr: Int!
+  ceRr: Int!
+  ceHeight: Int!
+  ceWeight: Int!
+  diagnosisAfterReport: String
+  medication: String!
+  advice:String!
+  query:String!
+  followUpObservations:String!
+  createdAt: String!
+  sharedRecord:[SharedRecord]!
+}
+type SharedCase {
+  sharedCaseId: ID!
+  case: PatientCase!
+  sender: MedicalPractitioner!
+  receiver: MedicalPractitioner!
+  HL7: String!
+  sharedAt: String!
+}
+type SharedRecord {
+  sharedRecordId: ID!
+  record: PatientRecord!
+  case: PatientCase!
+  sender: MedicalPractitioner!
+  receiver: MedicalPractitioner!
+  HL7: String!
+  sharedAt: String!
+}

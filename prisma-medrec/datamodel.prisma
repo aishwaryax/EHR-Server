@@ -1,0 +1,217 @@
+type ICDCode {
+  id: ID! @id
+  icdCode: String! @unique
+  commonName: String!
+  icdSubCodes: [ICDSubCode]!
+}
+type ICDSubCode {
+  id: ID! @id
+  icdSubCode: String! @unique
+  scientificName: String!
+  icdCode: ICDCode! @relation(link:INLINE,onDelete:SET_NULL)
+}
+enum Gender {
+  Male
+  Female
+  Transgender
+}
+enum MaritalStatus {
+  Single
+  Married
+  Divorced
+  Widowed
+}
+enum DiagnosisType {
+  Provisional
+  Final
+  Interim
+}
+enum UserType {
+  DatabaseAdmin
+  MedicalPractitioner
+  Patient
+}
+type User {
+  id: ID! @id
+  firstName: String!
+  middleName:String!
+  lastName:String!
+  dob: DateTime!
+  email:String! @unique
+  sex: Gender!
+  password:String!
+  role: UserType!
+  isAdmin: Boolean!
+  verified: Boolean!
+  publicHash:String! @unique
+  privateHash:String! @unique
+}
+type BlockChain{
+  id: ID! @id
+  user: User! @relation(link:INLINE,onDelete:SET_NULL)
+  blocks: [Block!]! @relation(link:INLINE,onDelete:SET_NULL)
+}
+
+type Block{
+  id:ID! @id
+  blockNumber: Int!
+  timestamp:DateTime! @createdAt
+  lastHash: String! @unique
+  hash: String! @unique
+  data: String!
+  nonce: Int!
+  difficulty: Int! 
+}
+type DatabaseAdmin{
+  id: ID! @id
+  user:User! @relation(link: INLINE,onDelete:SET_NULL)
+  contact: String!
+  address: String!
+  country: Country! @relation(link: INLINE,onDelete:SET_NULL)
+  hospital: Hospital! @relation(link: INLINE,onDelete:SET_NULL)
+  registeredAt: DateTime! @createdAt
+}
+type MedicalPractitioner{
+  id: ID! @id
+  user:User! @relation(link: INLINE,onDelete:SET_NULL)
+  mpId: String! @unique
+  address: String!
+  clinicAddress: String!
+  degree: String!
+  field: String!
+  hospital: Hospital! @relation(link: INLINE,onDelete:SET_NULL)
+  registeredAt: DateTime! @createdAt
+}
+type Patient{
+  id: ID! @id
+  user:User! @relation(link: INLINE,onDelete:SET_NULL)
+  patientId: String! @unique
+  bloodGroup: String!
+  religion: String!
+  maritalStatus: MaritalStatus!
+  primaryLanguage: String!
+  birthPlace: String!
+  address: String!
+  pincode: Region! @relation(link: INLINE,onDelete:SET_NULL)
+  country: Country! @relation(link: INLINE,onDelete:SET_NULL)
+  occupation: String!
+  contact1: String!
+  contact2: String!
+  socioEcoStatus: String!
+  immunizationHistory: String!  
+  allergyStatus: Boolean! @default(value: false)
+  organDonorStatus: Boolean! @default(value: false)
+  PMH: String!
+  DHx: String!
+  Ca: Boolean! @default(value: false)
+  IDDM: Boolean! @default(value: false)
+  NIDDM: Boolean! @default(value: false)
+  COPD: Boolean! @default(value: false)
+  MI: Boolean! @default(value: false)
+  AF: Boolean! @default(value: false)
+  registeredAt: DateTime! @createdAt
+  cpId: CareProvider @relation(link: INLINE,onDelete:SET_NULL)
+  insurance: Insurance @relation(link: INLINE,onDelete:SET_NULL)
+  patientCase: [PatientCase]! @relation(link: INLINE,onDelete:SET_NULL)
+}
+type CareProvider {
+  id: ID! @id
+  patient: Patient!
+  cpId: String! @unique
+  cpaddress: String!
+  city: String!
+  pincode: Region! @relation(link: INLINE,onDelete:SET_NULL)
+  country: Country! @relation(link: INLINE,onDelete:SET_NULL)
+  contact: String!
+  email: String! @unique
+}
+type Insurance {
+  id: ID! @id
+  patient: Patient!
+  insuranceId: String! @unique
+  insuranceStatus: String!
+  insuranceCompany1: String!
+  insuranceCompany2: String!
+  sponsorerDetails: String!
+}
+type PatientCase {
+  id: ID! @id
+  patient: Patient!
+  caseId: String! @unique
+  medicalPractitioner: MedicalPractitioner! @relation(link: INLINE,onDelete:SET_NULL)
+  icdCode: ICDCode! @relation(link: INLINE,onDelete:SET_NULL)
+  icdSubCode: ICDSubCode! @relation(link: INLINE,onDelete:SET_NULL)
+  HPC: String!
+  MoI: String
+  DandV: String
+  clinicalNote: String!
+  noOfVisits: Int!
+  diagnosisType: DiagnosisType!
+  currentClinicalStatus: Boolean!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  patientRecord: [PatientRecord]! @relation(link: INLINE,onDelete:SET_NULL)
+  sharedCase: [SharedCase]! @relation(link: INLINE,onDelete:SET_NULL)
+  sharedRecord: [SharedRecord]! @relation(link: INLINE,onDelete:SET_NULL)
+}
+type PatientRecord {
+  id: ID! @id
+  patient: Patient! @relation(link: INLINE,onDelete:SET_NULL)
+  case: PatientCase!
+  recordId: String! @unique
+  medicalPractitioner: MedicalPractitioner! @relation(link: INLINE,onDelete:SET_NULL)
+  visitNo: Int!
+  onArrival: String!
+  diagnosis: String!
+  Tx: String!
+  reportSuggestions: String
+  cevsSp: Int!
+  cevsDp: Int!
+  cePr: Int!
+  ceRr: Int!
+  ceHeight: Int!
+  ceWeight: Int!
+  diagnosisAfterReport: String
+  medication: String!
+  advice:String!
+  query:String!
+  followUpObservations:String!
+  createdAt: DateTime! @createdAt
+  sharedRecord: [SharedRecord]! @relation(link: INLINE,onDelete:SET_NULL)
+}
+type SharedCase {
+  sharedCaseId: ID! @id
+  case: PatientCase!
+  sender: MedicalPractitioner! @relation(name:"SendCaseRelation",link: INLINE,onDelete:SET_NULL)
+  receiver: MedicalPractitioner! @relation(name:"ReceiveCaseRelation",link: INLINE,onDelete:SET_NULL)
+  HL7: String!
+  sharedAt: DateTime! @createdAt
+}
+type SharedRecord {
+  sharedRecordId: ID! @id
+  record: PatientRecord!
+  case: PatientCase!
+  sender: MedicalPractitioner! @relation(name:"SendRecordRelation",link: INLINE,onDelete:SET_NULL)
+  receiver: MedicalPractitioner! @relation(name:"ReceiveRecordRelation",link: INLINE,onDelete:SET_NULL)
+  HL7: String!
+  sharedAt: DateTime! @createdAt
+}
+type Country {
+  id: ID! @id
+  countryCode: Int! @unique
+  countryName: String!
+}
+type Region {
+  id: ID! @id
+  pincode: Int! @unique
+  region: String!
+}
+type Hospital {
+  id: ID! @id
+  hospitalId: String! @unique
+  name: String!
+  address: String!
+  district: String!
+  pincode: Region! @relation(link: INLINE,onDelete:SET_NULL)
+  country: Country! @relation(link: INLINE,onDelete:SET_NULL)
+}
